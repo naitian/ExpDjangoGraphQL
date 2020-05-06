@@ -12,4 +12,4 @@ class AuthorForm(ModelForm):
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['section', 'author', 'headline', 'content']
+        fields = ['section', 'authors', 'headline', 'content']

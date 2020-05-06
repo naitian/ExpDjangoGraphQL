@@ -5,20 +5,6 @@ from django.contrib.auth import get_user_model
 from .models import Author, Post
 
 
-class PostType(DjangoObjectType):
-    class Meta:
-        model = Post
-        fields = (
-            "section",
-            "author",
-            "updated",
-            "created",
-            "headline",
-            "content",
-            "id",
-        )
-
-
 class AuthorType(DjangoObjectType):
     class Meta:
         model = Author
@@ -48,6 +34,20 @@ class AuthorType(DjangoObjectType):
         if self is not None:
             return self.user.last_name
         return None
+
+
+class PostType(DjangoObjectType):
+    class Meta:
+        model = Post
+        fields = (
+            "section",
+            "authors",
+            "updated",
+            "created",
+            "headline",
+            "content",
+            "id",
+        )
 
 
 class UserType(DjangoObjectType):

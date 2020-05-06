@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,11 +39,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "graphene_django",
+    "corsheaders",
     "graphapi.stories.apps.StoriesConfig",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -96,6 +99,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Authenticaion Backend
+# https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#other-authentication-sources
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -117,4 +128,22 @@ STATIC_URL = "/static/"
 
 # Graphene
 # https://docs.graphene-python.org/projects/django/en/latest/
-GRAPHENE = {"SCHEMA": "graphapi.schema.schema"}
+GRAPHENE = {
+    "SCHEMA": "graphapi.schema.schema",
+    "MIDDLEWARE": ["graphql_jwt.middleware.JSONWebTokenMiddleware",],
+}
+
+# Configure GraphQL JWTs
+# https://django-graphql-jwt.domake.io/en/latest/quickstart.html
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_EXPIRATION_DELTA": timedelta(minutes=5),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
+}
+
+
+# Allow CORS from our front-end sites
+# https://fractalideas.com/blog/making-react-and-django-play-well-together-single-page-app-model/
+# https://github.com/adamchainz/django-cors-headers#cors_allow_credentials
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://localhost:1234"]

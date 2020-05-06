@@ -1,5 +1,6 @@
 import graphene
 from graphene_django.forms.mutation import DjangoModelFormMutation
+from graphql_jwt.decorators import login_required
 
 from .forms import AuthorForm, PostForm
 from .models import Author, Post
@@ -18,6 +19,11 @@ class AuthorMutation(DjangoModelFormMutation):
 
     class Meta:
         form_class = AuthorForm
+
+    @classmethod
+    @login_required
+    def perform_mutate(form, info):
+        super(form, info)
 
 
 class Mutation(graphene.ObjectType):

@@ -13,11 +13,11 @@ class AuthorQueries(graphene.ObjectType):
         return Author.objects.all()
 
     def resolve_author(self, info, id=None, username=None):
-        if id is not None:
+        if id is not None and username is None:
             return Author.objects.get(pk=id)
-        if username is not None:
+        if username is not None and id is None:
             return Author.objects.get(user__username=username)
-        return None
+        raise Exception("Must specify exactly one of id or username")
 
     def resolve_me(self, info):
         user = info.context.user

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "graphene_django",
     "corsheaders",
-    "graphapi.stories.apps.StoriesConfig",
+    "graphapi.stories",
 ]
 
 MIDDLEWARE = [
